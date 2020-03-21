@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Home</h1>
+</div>
+<p>Hello world!</p>
+<p>This page loaded at {{ moment(current_time).format('LLLL') }} (That was {{ moment(current_time).fromNow(refresh=True) }})</p>
+<h2>Featured Content</h2>
+<ul>
+    <li><a href="{{ url_for('user', name='bob', show='profile', is_foo=1) }}">Bob User Profile</a></li>
+    <li><a href="{{ url_for('bugs', name='Rhinocerous Beetle', foo='bar') }}">Rhinocerous Beetle</a></li>
+    <li><a href="{{ url_for('fish', name='', page=1) }}">All Fish</a></li>
+</ul>
+{% endblock %}
