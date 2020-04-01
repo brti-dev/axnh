@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Fish</h1>
+</div>
+
+<table>
+{% for item in fish %}
+    {% if loop.first %}
+        <tr>
+        {% for key, value in item.items() %}
+            <th>{{ key }}</th>
+        {% endfor %}
+        </tr>
+    {% endif %}
+    <tr>
+        {% for key, value in item.items() %}
+            <td class="{{ loop.cycle('odd','even') }}">{{ value }}</td>
+        {% endfor %}
+    </tr>
+{% endfor %}
+</table>
+
+{% endblock %}

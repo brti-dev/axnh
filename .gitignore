@@ -40,3 +40,9 @@ nosetests.xml
 
 # Virtual environment
 .venv
+
+# static images
+static/images/
+
+# Virtual Studio Code settings
+.vscode/

@@ -24,11 +24,14 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">Flasky</a>
+            <a class="navbar-brand" href="/">AXNH</a>
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li><a href="/">Home</a></li>
+                <li><a href="/">Now</a></li>
+                <li><a href="{{ url_for('fish') }}">All Fish</a></li>
+                <li><a href="{{ url_for('bugs') }}">All Bugs</a></li>
+                <li><a href="{{ url_for('events') }}">All Events</a></li>
             </ul>
         </div>
     </div>

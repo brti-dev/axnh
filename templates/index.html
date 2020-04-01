@@ -1,15 +1,36 @@
 {% extends "base.html" %}
 
 {% block page_content %}
-<div class="page-header">
-    <h1>Home</h1>
-</div>
-<p>Hello world!</p>
-<p>This page loaded at {{ moment(current_time).format('LLLL') }} (That was {{ moment(current_time).fromNow(refresh=True) }})</p>
-<h2>Featured Content</h2>
-<ul>
-    <li><a href="{{ url_for('user', name='bob', show='profile', is_foo=1) }}">Bob User Profile</a></li>
-    <li><a href="{{ url_for('bugs', name='Rhinocerous Beetle', foo='bar') }}">Rhinocerous Beetle</a></li>
-    <li><a href="{{ url_for('fish', name='', page=1) }}">All Fish</a></li>
-</ul>
+<main>
+    <div class="page-header">
+        <h1>Home</h1>
+    </div>
+    <p>Hello world!</p>
+    <p>This page loaded at {{ moment(current_time).format('LLLL') }} (That was {{ moment(current_time).fromNow(refresh=True) }})</p>
+    <h2>Critters available at <span id="time">{{ moment(current_time).format('LLLL') }}</span></h2>
+    <p>This feature is coming soon. See raw data:</p>
+    <ul>
+        <li><a href="{{ url_for('fish') }}">Fish</a></li>
+        <li><s>Bugs</s></li>
+        <li><s>Events</s></li>
+    </ul>
+    <!--<h2>Featured Content</h2>
+    <ul>
+        <li><a href="{{ url_for('user', name='bob', show='profile', is_foo=1) }}">Bob User Profile</a></li>
+        <li><a href="{{ url_for('bugs', name='Rhinocerous Beetle', foo='bar') }}">Rhinocerous Beetle</a></li>
+        <li><a href="{{ url_for('fish', name='', page=1) }}">All Fish</a></li>
+    </ul>-->
+</main>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script> 
+    function sendTimeToServer(){
+        var time = new Date();
+        document.getElementById("time").innerHTML = time;
+        $.get("getTime", { time: time })
+    }
+    $(document).ready(sendTimeToServer);
+</script>
 {% endblock %}
