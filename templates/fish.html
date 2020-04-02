@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 
 {% block page_content %}
-<div class="page-header">
-    <h1>Fish</h1>
-</div>
+{% if name %}
+<h1>{{name}}</h1>
+<p>It's a fish</p>
+{% else %}
+<h1>Fish</h1>
 
 <table>
 {% for item in fish %}
@@ -16,10 +18,16 @@
     {% endif %}
     <tr>
         {% for key, value in item.items() %}
-            <td class="{{ loop.cycle('odd','even') }}">{{ value }}</td>
+            <td class="{{ loop.cycle('odd','even') }}">
+            {% if key == 'Name' %}
+                <a href="{{url_for('fish', name=value)}}">{{value}}</a>
+            {% else %}
+                {{value}}
+            {% endif %}    
+            </td>
         {% endfor %}
     </tr>
 {% endfor %}
 </table>
-
+{% endif %}
 {% endblock %}

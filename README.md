@@ -1,6 +1,6 @@
 # Animal Xing New Horizons
 
-An app to show what critters are available at a particular time, notably time of access, and to list all available critters based on month, time of day, and location.
+An app for [Animal Crossing: New Horizons](https://www.nintendo.com/games/detail/animal-crossing-new-horizons-switch/) players to show what critters are available at a particular time, notably time of access, and to list all available critters based on month, time of day, and location. Also events (holidays, birthdays, NPC visits, etc.) if time permits.
 
 ## Built With
 
@@ -20,11 +20,12 @@ Contributions welcome!
 
 ### Code of Conduct
 
-All fruits are created equal, especially pears. No fruit discrimination allowed. This is a safe place. [#peargang4life](https://twitter.com/hashtag/peargang)
+All fruits are created equal, especially pears. No fruit discrimination allowed. This is a safe place. [#peargang](https://twitter.com/hashtag/peargang)4life
 
 ## Authors
 
 * **Matt Berti** - *Initial work* - [Dr Spaceman](https://github.com/dr-spaceman)
+* Your name here
 
 ## Acknowledgments
 

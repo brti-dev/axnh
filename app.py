@@ -1,12 +1,14 @@
 from config import config
-from flask import Flask, abort, flash, redirect, render_template, request, session, url_for
+from flask import Flask, abort, flash, redirect, render_template, request, session, url_for, make_response
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 from datetime import datetime
+from forms import SearchForm
+import os, time, csv
+
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
-import os, time, csv
 
 bootstrap = Bootstrap()
 moment = Moment()
@@ -25,17 +27,18 @@ def index():
     flash('fuuu')
     return render_template(
         'index.html',
-        current_time = datetime.utcnow(), 
+        current_time = datetime.utcnow()
     )
 
-# Establishes the user's time via frontend
-# If different from server time, refresh the page to reflect current stuffs
+""" Establishes the user's time via frontend
+    If different from server time, refresh the page to reflect current stuffs"""
 @app.route("/getTime", methods=['GET'])
 def getTime():
     print("browser time: ", request.args.get("time"))
-    print("server time : ", time.strftime('%A %B, %d %Y %H:%M:%S'));
-    return "Done"
-
+    print("server time : ", time.strftime('%A %B, %d %Y %H:%M:%S'))
+    response = make_response('Test worked!', 200)
+    response.headers['Content-Type'] = 'application/json'
+    return response
 
 @app.route("/fish")
 @app.route("/fish/<name>")
@@ -61,22 +64,6 @@ def bugs(name=None):
 def events(name=None):
     return render_template('404.html', name=name)
 
-class SearchNameForm(FlaskForm):
-    name = StringField('Search Users', validators=[DataRequired()])
-    submit = SubmitField('Submit')
-
-@app.route("/user/<string:name>", methods=['GET', 'POST'])
-def user(name):
-    form = SearchNameForm()
-    if form.validate_on_submit():
-        name = form.name.data
-        return redirect(url_for('user', name=name))
-    return render_template(
-        'user.html', 
-        name = name,
-        form = form,
-    )
-
 users = {1:'bob', 2:'foo', 3:'bar'}
 
 @app.route("/user/id/<int:id>")
@@ -87,6 +74,30 @@ def userId(id):
         return redirect(url_for('user', name=users.get(id)))
     return 'Get USERID:{}'.format(id)
 
+@app.route('/search/', methods=['GET', 'POST'])
+@app.route('/search/<string:query>')
+def search(query=None):
+    form = SearchForm()
+    if form.validate_on_submit():
+        query = form.query.data
+        print('form valid... redirect to', url_for('search', query=query))
+        """This doesn't work. Why?! expect /search/foo actual /search/?query=foo
+        return redirect(url_for('search', query=query))"""
+        return redirect('/search/' + query)
+    return render_template('search.html', query=query)
+
+@app.route("/user/<string:name>", methods=['GET', 'POST'])
+def user(name):
+    form = SearchForm()
+    if form.validate_on_submit():
+        query = form.query.data
+        return redirect(url_for('user', name=name))
+    return render_template(
+        'user.html', 
+        name = name,
+        form = form,
+    )
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
@@ -94,3 +105,8 @@ def page_not_found(e):
 @app.errorhandler(500)
 def internal_server_error(e):
     return render_template('500.html'), 500
+
+"""Use Context Processor to inject variables into templates"""
+@app.context_processor
+def inject():
+    return dict(search_form=SearchForm())
