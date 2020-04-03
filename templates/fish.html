@@ -4,27 +4,24 @@
 {% if name %}
 <h1>{{name}}</h1>
 <p>It's a fish</p>
+<p>here's some info {{ data }}</p>
 {% else %}
 <h1>Fish</h1>
 
 <table>
-{% for item in fish %}
+{% for name, d in data.items() %}
     {% if loop.first %}
         <tr>
-        {% for key, value in item.items() %}
-            <th>{{ key }}</th>
-        {% endfor %}
+            <th>Fish</th>
+            {% for key, value in d.items() %}
+                <th>{{ key }}</th>
+            {% endfor %}
         </tr>
     {% endif %}
     <tr>
-        {% for key, value in item.items() %}
-            <td class="{{ loop.cycle('odd','even') }}">
-            {% if key == 'Name' %}
-                <a href="{{url_for('fish', name=value)}}">{{value}}</a>
-            {% else %}
-                {{value}}
-            {% endif %}    
-            </td>
+        <td><a href="{{url_for('fish', name=name)}}">{{name}}</a></td>
+        {% for key, value in d.items() %}
+            <td>{{value}}</td>
         {% endfor %}
     </tr>
 {% endfor %}

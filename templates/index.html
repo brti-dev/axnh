@@ -8,6 +8,7 @@
     <p>Hello world!</p>
     <p>This page loaded at {{ moment(current_time).format('LLLL') }} (That was {{ moment(current_time).fromNow(refresh=True) }})</p>
     <h2>Critters available at <span id="time">{{ moment(current_time).format('LLLL') }}</span></h2>
+    <pre>{{data}}</pre>
     <p>This feature is coming soon. See raw data:</p>
     <ul>
         <li><a href="{{ url_for('fish') }}">Fish</a></li>
@@ -26,12 +27,20 @@
 
 {% block scripts %}
 {{ super() }}
+<script src="{{ url_for('static', filename='javascript/moment-timezone-with-data-10-year-range.js') }}"></script>
 <script> 
     function sendTimeToServer(){
-        var time = new Date();
-        document.getElementById("time").innerHTML = time;
-        $.get("getTime", { time: time })
+        var time_readable = moment().format('MMMM Do YYYY, h:mm:ss a');
+        var time = moment().format('M D H');
+        var timezone = moment.tz.guess();
+        document.getElementById("time").innerHTML = time_readable + ' ' + timezone;
+        $.get("getTime", { time: time + ' ' + timezone }, function(response){
+            flash(response.response);
+            console.log('Send time to backend; Response: ' + response.response);
+        });
     }
-    $(document).ready(sendTimeToServer);
+    $(document).ready(function(){
+        sendTimeToServer();
+    });
 </script>
 {% endblock %}

@@ -12,6 +12,16 @@
 {% block scripts %}
 {{ super() }}
 {{ moment.include_moment() }}
+<script> 
+    function flash(message){
+        $("#flash").append('<div class="alert alert-warning"><button type="button" class="close" data-dismiss="alert">&times;</button>'+message+'</div>');
+    }
+    $(document).ready(function(){
+        {% for message in get_flashed_messages() %}
+            flash('{{message}}');
+        {% endfor %}
+    });
+</script>
 {% endblock %}
 
 {% block navbar %}
@@ -39,12 +49,7 @@
 
 {% block content %}
 <div class="container">
-    {% for message in get_flashed_messages() %}
-    <div class="alert alert-warning">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        {{ message }}
-    </div>
-    {% endfor %}
+    <div id="flash"></div>
     {% block page_content %}{% endblock %}
 </div>
 {% endblock %}

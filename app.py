@@ -1,14 +1,10 @@
 from config import config
-from flask import Flask, abort, flash, redirect, render_template, request, session, url_for, make_response
+from flask import Flask, abort, flash, redirect, render_template, request, session, url_for, jsonify
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 from datetime import datetime
 from forms import SearchForm
-import os, time, csv
-
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired
+import os, time, json
 
 bootstrap = Bootstrap()
 moment = Moment()
@@ -22,37 +18,64 @@ config[config_name].init_app(app)
 bootstrap.init_app(app)
 moment.init_app(app)
 
+class DB:
+    hemisphere = 'north'
+
+    def __init(self, hemisphere='north'):
+        self.hemisphere = hemisphere
+
+    def getTable(self, table):
+        with open('./data/fish_'+self.hemisphere+'.json') as json_file:
+            data = json.load(json_file)
+        return data
+
+    def getAll(self, filter={}):
+        data = self.getTable('fish')
+        if filter:
+            data = [item for item in data]
+        return data
+
+    def getByName(self, name, table):
+        data = self.getTable(table)
+        return data.get(name)
+
 @app.route('/')
 def index():
-    flash('fuuu')
+    flash('foo')
+    flash('bar')
+    db = DB()
+    data = db.getAll({'month':4, 'hour':23})
     return render_template(
         'index.html',
-        current_time = datetime.utcnow()
+        current_time = datetime.utcnow(),
+        data = data
     )
 
 """ Establishes the user's time via frontend
     If different from server time, refresh the page to reflect current stuffs"""
 @app.route("/getTime", methods=['GET'])
 def getTime():
-    print("browser time: ", request.args.get("time"))
-    print("server time : ", time.strftime('%A %B, %d %Y %H:%M:%S'))
-    response = make_response('Test worked!', 200)
-    response.headers['Content-Type'] = 'application/json'
-    return response
+    time = request.args.get("time")
+    print("Browser time: ", request.args.get("time"))
+    print("Server time : ", time.strftime('%A %B, %d %Y %H:%M:%S'))
+    month, day, hour, timezone = time.split(' ')
+    #set session for hemisphere
+    response_json = {'response':'OK', 'html':''}
+    return jsonify(response_json)
 
 @app.route("/fish")
 @app.route("/fish/<name>")
 def fish(name=None):
+    db = DB()
+    data = db.getTable('fish')
     if (name == None):
-        with open('./data/fish_north.csv', newline='') as csvfile:
-            fish = [row for row in csv.DictReader(csvfile)]
         flash('Work in progress')
         return render_template(
             'fish.html',
-            fish = fish
+            data = data
         )
     else:
-        return render_template('fish.html', name = name)
+        return render_template('fish.html', name=name, data=db.getByName(name, 'fish'))
 
 @app.route("/bugs")
 @app.route("/bugs/<name>")
@@ -90,7 +113,7 @@ def search(query=None):
 def user(name):
     form = SearchForm()
     if form.validate_on_submit():
-        query = form.query.data
+        name = form.name.data
         return redirect(url_for('user', name=name))
     return render_template(
         'user.html', 
