@@ -4,7 +4,7 @@ from datetime import datetime
 import requests, json
 
 # Config
-get_from_source = True
+get_from_source = False
 get_images = False
 hemispheres = ('north', 'south')
 
@@ -90,11 +90,11 @@ for hemisphere in hemispheres:
                 continue
 
             if heading == 'time':
-                data[name]['time'] = []
-                data[name]['time_readable'] = elem_raw
+                data[name]['times'] = []
+                data[name]['times_readable'] = elem_raw
                 
                 if elem_raw == 'All day':
-                    data[name]['time'].append((0, 24))
+                    data[name]['times'] += range(24)
                     continue
                 
                 times = []
@@ -106,10 +106,10 @@ for hemisphere in hemispheres:
                 for time in times:
                     start, fin = [convertTime(x) for x in time.split('-')]
                     if start > fin:
-                        data[name]['time'].append((start, 24))
-                        data[name]['time'].append((0, fin))
+                        data[name]['times'] += range(fin)
+                        data[name]['times'] += range(start, 24)
                     else:
-                        data[name]['time'].append((start, fin))
+                        data[name]['times'] += range(start, fin)
                 
                 continue
             
