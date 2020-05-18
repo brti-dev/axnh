@@ -3,7 +3,7 @@
 {% block page_content %}
 {% if name %}
 <h1>{{name}}</h1>
-<p>It's a fish</p>
+<p>It's a <a href="{{url_for('fish')}}">fish</a></p>
 <p>here's some info {{ data }}</p>
 {% else %}
 <h1>Fish</h1>
@@ -19,7 +19,7 @@
         </tr>
     {% endif %}
     <tr>
-        <td><a href="{{url_for('fish', name=name)}}">{{name}}</a></td>
+        <td><a href="{{url_for('fish', name=name)}}"><img src="{{ url_for('static', filename='images/fish/'+name+'.png') }}" alt="{{ name }}">{{name}}</a></td>
         {% for key, value in d.items() %}
             <td>{{value}}</td>
         {% endfor %}

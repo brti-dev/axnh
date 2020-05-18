@@ -5,6 +5,7 @@ from flask_moment import Moment
 from datetime import datetime
 from forms import SearchForm
 import os, time, json
+from pprint import pprint
 
 bootstrap = Bootstrap()
 moment = Moment()
@@ -29,13 +30,29 @@ class DB:
             data = json.load(json_file)
         return data
 
-    def getAll(self, filter={}):
-        data = self.getTable('fish')
+    def findAll(self, table, filter={}):
+        data = self.getTable(table)
         if filter:
-            data = [item for item in data]
+            for name, info in data.copy().items():
+                print(name, '***********')
+                found = 0
+                for key, val in info.items():
+                    print(key, ':', type(val))
+                    if key in filter:
+                        print('check', filter, key, filter[key])
+                        if type(val) is list:
+                            if filter[key] in val:
+                                found += 1
+                                print('found', filter[key], 'in', key)
+                        else:
+                            if filter[key] == val:
+                                found += 1
+                                print('found', filter[key], 'in', key)
+                if found < 2:
+                    del data[name]
         return data
 
-    def getByName(self, name, table):
+    def findByName(self, name, table):
         data = self.getTable(table)
         return data.get(name)
 
@@ -44,7 +61,7 @@ def index():
     flash('foo')
     flash('bar')
     db = DB()
-    data = db.getAll({'month':4, 'hour':23})
+    data = db.findAll('fish', {'months':5, 'times':23})
     return render_template(
         'index.html',
         current_time = datetime.utcnow(),
@@ -55,12 +72,12 @@ def index():
     If different from server time, refresh the page to reflect current stuffs"""
 @app.route("/getTime", methods=['GET'])
 def getTime():
-    time = request.args.get("time")
-    print("Browser time: ", request.args.get("time"))
+    client_time = request.args.get("time")
+    print("Client time: ", client_time)
     print("Server time : ", time.strftime('%A %B, %d %Y %H:%M:%S'))
-    month, day, hour, timezone = time.split(' ')
+    month, day, hour, timezone = client_time.split(' ')
     #set session for hemisphere
-    response_json = {'response':'OK', 'html':''}
+    response_json = {'response':'OK', 'html':'<time datetime="{}-{}T{}:00{}">fuuu</time>'.format(month, day, hour, timezone)}
     return jsonify(response_json)
 
 @app.route("/fish")
@@ -75,7 +92,7 @@ def fish(name=None):
             data = data
         )
     else:
-        return render_template('fish.html', name=name, data=db.getByName(name, 'fish'))
+        return render_template('fish.html', name=name, data=db.findByName(name, 'fish'))
 
 @app.route("/bugs")
 @app.route("/bugs/<name>")
