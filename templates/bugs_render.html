@@ -1,0 +1,10 @@
+<ul>
+    {% for name, var in data.bugs.items() %}
+        <li>
+            <a href="{{ url_for('bugs', name=name) }}">
+                <img src="{{ url_for('static', filename='images/bugs/'+name+'.png') }}" alt="{{ name }}">
+                {{ name }}
+            </a> ({{ var.location }})
+        </li>
+    {% endfor %}
+</ul>

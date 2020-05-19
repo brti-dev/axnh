@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+{% if name %}
+<h1>{{name}}</h1>
+<p>It's a <a href="{{url_for('bugs')}}">bug</a></p>
+<p>here's some info {{ data }}</p>
+{% else %}
+<h1>Bugs</h1>
+
+<table>
+{% for name, d in data.items() %}
+    {% if loop.first %}
+        <tr>
+            <th>Bugs</th>
+            {% for key, value in d.items() %}
+                <th>{{ key }}</th>
+            {% endfor %}
+        </tr>
+    {% endif %}
+    <tr>
+        <td><a href="{{url_for('bugs', name=name)}}"><img src="{{ url_for('static', filename='images/bugs/'+name+'.png') }}" alt="{{ name }}">{{name}}</a></td>
+        {% for key, value in d.items() %}
+            <td>{{value}}</td>
+        {% endfor %}
+    </tr>
+{% endfor %}
+</table>
+{% endif %}
+{% endblock %}

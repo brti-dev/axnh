@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block page_content %}
 <main>
@@ -9,16 +9,10 @@
     <p>This page loaded at {{ moment(current_time).format('LLLL') }} (That was {{ moment(current_time).fromNow(refresh=True) }})</p>
     <h2>Critters available at <span id="time">{{ moment(current_time).format('LLLL') }}</span></h2>
     <pre>{{data}}</pre>
-    <ul>
-        {% for name, var in data.items() %}
-            <li>
-                <a href="{{ url_for('fish', name=name) }}">
-                    <img src="{{ url_for('static', filename='images/fish/'+name+'.png') }}" alt="{{ name }}">
-                    {{ name }}
-                </a> ({{ var.location }})
-            </li>
-        {% endfor %}
-    </ul>
+    <div id="currentdata">
+        {% include 'fish_render.html' %}
+        {% include 'bugs_render.html' %}
+    </div>
     <p>This feature is coming soon. See raw data:</p>
     <ul>
         <li><a href="{{ url_for('fish') }}">Fish</a></li>
@@ -44,9 +38,14 @@
         var time = moment().format('M D H');
         var timezone = moment.tz.guess();
         document.getElementById("time").innerHTML = time_readable + ' ' + timezone;
-        $.get("getTime", { time: time + ' ' + timezone }, function(response){
-            flash(response.response);
-            console.log('Send time to backend; Response: ' + response.response);
+        $.get("getTime", { time: time, timezone: timezone }, function(response) {
+            if (response.response) {
+                flash(response.response)
+            }
+            if (response.html) {
+                $("#currentdata").html(response.html)
+            }
+            console.log('Send time to backend; Response: ' + response.response)
         });
     }
     $(document).ready(function() {

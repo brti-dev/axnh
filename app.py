@@ -4,8 +4,8 @@ from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 from datetime import datetime
 from forms import SearchForm
-import os, time, json
 from pprint import pprint
+import os, time, json
 
 bootstrap = Bootstrap()
 moment = Moment()
@@ -26,7 +26,7 @@ class DB:
         self.hemisphere = hemisphere
 
     def getTable(self, table):
-        with open('./data/fish_'+self.hemisphere+'.json') as json_file:
+        with open('./data/{}_{}.json'.format(table, self.hemisphere)) as json_file:
             data = json.load(json_file)
         return data
 
@@ -34,20 +34,20 @@ class DB:
         data = self.getTable(table)
         if filter:
             for name, info in data.copy().items():
-                print(name, '***********')
+                # print(name, '***********')
                 found = 0
                 for key, val in info.items():
-                    print(key, ':', type(val))
+                    # print(key, ':', type(val))
                     if key in filter:
-                        print('check', filter, key, filter[key])
+                        # print('check', filter, key, filter[key])
                         if type(val) is list:
                             if filter[key] in val:
                                 found += 1
-                                print('found', filter[key], 'in', key)
+                                # print('found', filter[key], 'in', key)
                         else:
                             if filter[key] == val:
                                 found += 1
-                                print('found', filter[key], 'in', key)
+                                # print('found', filter[key], 'in', key)
                 if found < 2:
                     del data[name]
         return data
@@ -61,7 +61,9 @@ def index():
     flash('foo')
     flash('bar')
     db = DB()
-    data = db.findAll('fish', {'months':5, 'times':23})
+    data = {}
+    data['fish'] = db.findAll('fish', {'months': int(time.strftime('%m')), 'times': int(time.strftime('%H'))})
+    data['bugs'] = db.findAll('bugs', {'months': int(time.strftime('%m')), 'times': int(time.strftime('%H'))})
     return render_template(
         'index.html',
         current_time = datetime.utcnow(),
@@ -73,11 +75,23 @@ def index():
 @app.route("/getTime", methods=['GET'])
 def getTime():
     client_time = request.args.get("time")
-    print("Client time: ", client_time)
-    print("Server time : ", time.strftime('%A %B, %d %Y %H:%M:%S'))
-    month, day, hour, timezone = client_time.split(' ')
-    #set session for hemisphere
-    response_json = {'response':'OK', 'html':'<time datetime="{}-{}T{}:00{}">fuuu</time>'.format(month, day, hour, timezone)}
+    client_timezone = request.args.get("timezone")
+    month, day, hour = client_time.split(' ')
+    print("Client time:", client_time, client_timezone)
+
+    server_time = '{} {} {}'.format(time.strftime('%m').strip('0'), time.strftime('%d').strip('0'), time.strftime('%H'))
+    server_timezone = time.strftime('%Z')
+    print("Server time:", server_time, server_timezone)
+
+    if client_time != server_time:
+        #set session for hemisphere
+        response_json = {
+            'response':'Information updated based on your local time', 
+            'html':'<time datetime="{}-{}T{}:00{}">Now</time>'.format(month, day, hour, client_timezone)
+        }
+    else:
+        response_json = {'ok':'ok'}
+
     return jsonify(response_json)
 
 @app.route("/fish")
@@ -97,7 +111,16 @@ def fish(name=None):
 @app.route("/bugs")
 @app.route("/bugs/<name>")
 def bugs(name=None):
-    return render_template('404.html', name=name)
+    db = DB()
+    data = db.getTable('bugs')
+    if (name == None):
+        flash('Work in progress')
+        return render_template(
+            'bugs.html',
+            data = data
+        )
+    else:
+        return render_template('bugs.html', name=name, data=db.findByName(name, 'bugs'))
 
 @app.route("/events")
 @app.route("/events/<name>")
