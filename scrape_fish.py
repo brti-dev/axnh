@@ -1,12 +1,15 @@
 from bs4 import BeautifulSoup
 from PIL import Image
 from datetime import datetime
-import requests, json
+import requests
+import json
+import os.path
 
 # Config
-get_from_source = False
-get_images = False
+get_from_source = False             # If true, scrape from source_url; If false, scrape from file_html
+get_images = True                   # Scrape images?
 hemispheres = ('north', 'south')
+january_column_num = 6              # The column number where the months begin; 0=Leftmost column
 
 # File locations
 images_dir = 'static/images/fish'
@@ -68,16 +71,20 @@ for hemisphere in hemispheres:
             
             if heading == 'name':
                 name = elem_raw
+                print(name)
                 data[name] = dict()
                 continue
 
             if heading == 'image':
                 # Scrape image
                 if get_images is True:
-                    image = elem.find('img')
-                    image_url = image['data-src']
-                    img = Image.open(requests.get(image_url, stream = True).raw)
-                    img.save(images_dir+'/'+name+'.png')
+                    img_dst = images_dir+'/'+name+'.png'
+                    if False == os.path.isfile(img_dst):
+                        image = elem.find('a')
+                        image_url = image['href']
+                        img = Image.open(requests.get(
+                            image_url, stream=True).raw)
+                        img.save(img_dst)
                 continue
             
             if heading == 'price':
@@ -114,10 +121,10 @@ for hemisphere in hemispheres:
                 continue
             
             # Months
-            if i == 6:
+            if i == january_column_num:
                 data[name]['months'] = []
-            if i >= 6:
-                month = i - 5
+            if i >= january_column_num:
+                month = i - january_column_num + 1
                 if elem_raw == '\u2713':
                     data[name]['months'].append(month)
                 continue
