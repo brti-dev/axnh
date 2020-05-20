@@ -42,7 +42,7 @@ nosetests.xml
 .venv
 
 # static images
-static/images/
+static/images/misc
 
 # Virtual Studio Code settings
 .vscode/
