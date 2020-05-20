@@ -7,15 +7,14 @@
 {{ super() }}
 <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/screen.min.css') }}">
 {% endblock %}
 
 {% block scripts %}
 {{ super() }}
 {{ moment.include_moment() }}
+<script src="{{ url_for('static', filename='javascript/app.min.js') }}"></script>
 <script> 
-    function flash(message){
-        $("#flash").append('<div class="alert alert-warning"><button type="button" class="close" data-dismiss="alert">&times;</button>'+message+'</div>');
-    }
     $(document).ready(function(){
         {% for message in get_flashed_messages() %}
             flash('{{message}}');

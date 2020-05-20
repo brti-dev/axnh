@@ -58,8 +58,7 @@ class DB:
 
 @app.route('/')
 def index():
-    flash('foo')
-    flash('bar')
+    flash('This page is under construction')
     db = DB()
     data = {}
     data['fish'] = db.findAll('fish', {'months': int(time.strftime('%m')), 'times': int(time.strftime('%H'))})
@@ -79,7 +78,8 @@ def getTime():
     month, day, hour = client_time.split(' ')
     print("Client time:", client_time, client_timezone)
 
-    server_time = '{} {} {}'.format(time.strftime('%m').strip('0'), time.strftime('%d').strip('0'), time.strftime('%H'))
+    server_time = '{} {} {}'.format(time.strftime('%m').lstrip(
+        '0'), time.strftime('%d').lstrip('0'), time.strftime('%H').lstrip('0'))
     server_timezone = time.strftime('%Z')
     print("Server time:", server_time, server_timezone)
 

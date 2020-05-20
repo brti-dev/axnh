@@ -22,6 +22,14 @@ class Config:
     @staticmethod
     def init_app(app):
         pass
+    
+    """Heroku expects applications to log directly to stdout. Anything 
+    the application prints to the standard output is saved and returned 
+    when you use the heroku logs command. So I'm going to add a 
+    configuration variable that indicates if I need to log to stdout 
+    or to a file like I've been doing. Here is the change in the 
+    configuration:"""
+    LOG_TO_STDOUT = os.environ.get('LOG_TO_STDOUT')
 
 class DevelopmentConfig(Config):
     DEBUG = True
