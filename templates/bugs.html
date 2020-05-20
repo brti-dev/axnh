@@ -4,7 +4,12 @@
 {% if name %}
 <h1>{{name}}</h1>
 <p>It's a <a href="{{url_for('bugs')}}">bug</a></p>
-<p>here's some info {{ data }}</p>
+<dl>
+    {% for key, val in data.items() %}
+        <dt>{{ key }}</dt>
+        <dd>{{ val }}</dd>
+    {% endfor %}
+</dl>
 {% else %}
 <h1>Bugs</h1>
 

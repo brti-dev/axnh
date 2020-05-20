@@ -85,9 +85,13 @@ def getTime():
 
     if client_time != server_time:
         #set session for hemisphere
+        db = DB()
+        data = {}
+        data['fish'] = db.findAll('fish', {'months': int(month), 'times': int(hour)})
+        data['bugs'] = db.findAll('bugs', {'months': int(month), 'times': int(hour)})
         response_json = {
             'response':'Information updated based on your local time', 
-            'html':'<time datetime="{}-{}T{}:00{}">Now</time>'.format(month, day, hour, client_timezone)
+            'html': render_template('fish_render.html', data=data) + render_template('bugs_render.html', data=data)
         }
     else:
         response_json = {'ok':'ok'}
