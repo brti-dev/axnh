@@ -8,6 +8,7 @@ An app for [Animal Crossing: New Horizons](https://www.nintendo.com/games/detail
 * [Flask v1.1](https://flask.palletsprojects.com/en/1.1.x/) - The web framework used
 * [Beautiful Soup v4](https://www.crummy.com/software/BeautifulSoup/bs4/doc/) - Web scraping
 * [Jinja 2](https://jinja.palletsprojects.com/en/2.11.x/) - Templating
+* [SCSS](https://sass-lang.com/) - CSS preprocessing
 * Bootstrap
 
 ## Launch
@@ -30,3 +31,4 @@ All fruits are created equal, especially pears. No fruit discrimination allowed.
 ## Acknowledgments
 
 * Data provided by [Animal Crossing Wiki | Fandom](https://animalcrossing.fandom.com/wiki/Animal_Crossing_Wiki) 
+* Runner.py compiler & minimizer inspired by [Julian Nash](https://pythonise.com/categories/python/python-minify-js-css-compile-scss)
