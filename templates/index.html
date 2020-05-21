@@ -1,32 +1,36 @@
 {% extends 'base.html' %}
 
 {% block page_content %}
-<main>
-    <h2>Critters available at <span id="time">{{ moment(current_time).format('LLLL') }}</span></h2>
-    <div id="currentdata">
-        {% include 'fish_render.html' %}
-        {% include 'bugs_render.html' %}
+<div class="speechbubble">
+    <div class="speechbubble-container">
+        <div class="speechbubble-speech">
+            The following specimines are available at <time id="time">{{ moment(current_time).format('LLLL') }}</time>
+        </div>
     </div>
-    <h2>Navigate</h2>
-    <ul>
-        <li><a href="{{ url_for('fish') }}">All Fish</a></li>
-        <li><a href="{{ url_for('bugs') }}">All Bugs</a></li>
-        <li><s>All Events</s></li>
-        <li>Search eg. <a href="{{url_for('search', query='Bitterling')}}">Bitterling</a></li>
-    </ul>
-    <pre>{{data}}</pre>
-    <p>This page loaded at {{ moment(current_time).format('LLLL') }} (That was {{ moment(current_time).fromNow(refresh=True) }})</p>
-    <!--<h2>Featured Content</h2>
-    <ul>
-        <li><a href="{{ url_for('user', name='bob', show='profile', is_foo=1) }}">Bob User Profile</a></li>
-        <li><a href="{{ url_for('bugs', name='Rhinocerous Beetle', foo='bar') }}">Rhinocerous Beetle</a></li>
-        <li><a href="{{ url_for('fish', name='', page=1) }}">All Fish</a></li>
-    </ul>-->
-</main>
+</div>
+<img src="{{ url_for('static', filename='images/assets/blathers.png') }}" alt="Blathers" id="speechbubble-blathers">
+
+<div id="currentdata">
+    {% include 'bugs_render.html' %}
+    {% include 'fish_render.html' %}
+</div>
+<h2>Navigate</h2>
+<ul>
+    <li><a href="{{ url_for('fish') }}">All Fish</a></li>
+    <li><a href="{{ url_for('bugs') }}">All Bugs</a></li>
+    <li><s>All Events</s></li>
+    <li>Search eg. <a href="{{url_for('search', query='Bitterling')}}">Bitterling</a></li>
+</ul>
+<p>This page loaded at {{ moment(current_time).format('LLLL') }} (That was {{ moment(current_time).fromNow(refresh=True) }})</p>
+<!--<h2>Featured Content</h2>
+<ul>
+    <li><a href="{{ url_for('user', name='bob', show='profile', is_foo=1) }}">Bob User Profile</a></li>
+    <li><a href="{{ url_for('bugs', name='Rhinocerous Beetle', foo='bar') }}">Rhinocerous Beetle</a></li>
+    <li><a href="{{ url_for('fish', name='', page=1) }}">All Fish</a></li>
+</ul>-->
 {% endblock %}
 
 {% block scripts %}
-{{ super() }}
 <script src="{{ url_for('static', filename='javascript/moment-timezone-with-data-10-year-range.js') }}"></script>
 <script> 
     function sendTimeToServer() {

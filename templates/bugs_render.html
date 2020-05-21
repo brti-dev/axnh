@@ -1,8 +1,8 @@
-<ul class="data-thumbs">
+<ul class="data-thumbs data-bugs">
     {% for name, var in data.bugs.items() %}
         <li>
             <a href="{{ url_for('bugs', name=name) }}" title="{{ name }} ({{ var.location }})">
-                <img src="{{ url_for('static', filename='images/bugs/'+name+'.png') }}" alt="{{ name }}">
+                <img src="{{ url_for('static', filename='images/bugs/'+name+'.png') }}" alt="{{ name }}" width="128" height="128">
             </a>
         </li>
     {% endfor %}

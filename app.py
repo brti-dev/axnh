@@ -58,7 +58,6 @@ class DB:
 
 @app.route('/')
 def index():
-    flash('This page is under construction')
     db = DB()
     data = {}
     data['fish'] = db.findAll('fish', {'months': int(time.strftime('%m')), 'times': int(time.strftime('%H'))})
@@ -90,7 +89,7 @@ def getTime():
         data['fish'] = db.findAll('fish', {'months': int(month), 'times': int(hour)})
         data['bugs'] = db.findAll('bugs', {'months': int(month), 'times': int(hour)})
         response_json = {
-            'response':'Information updated based on your local time', 
+            # 'response':'Information updated based on your local time', 
             'html': render_template('fish_render.html', data=data) + render_template('bugs_render.html', data=data)
         }
     else:

@@ -1,54 +1,51 @@
-{% extends "bootstrap/base.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>{% block title %}AXNH{% endblock %}</title>
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+        <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/screen.min.css') }}">
+        {% block head %}{% endblock %}
+    </head>
+    <body>
 
-{% block title %}AXNH{% endblock %}
+        <header class="container">
+            {% block navbar %}
+            <nav role="navigation">
+                <ul class="nav navbar-nav">
+                    <li><a href="/">Now</a></li>
+                    <li><a href="{{ url_for('fish') }}">All Fish</a></li>
+                    <li><a href="{{ url_for('bugs') }}">All Bugs</a></li>
+                    <li><a href="{{ url_for('events') }}">All Events</a></li>
+                </ul>
+                <form action="{{ url_for('search') }}" method="post" id="search">
+                    {{ search_form.query(placeholder='Search all the things') }}
+                    {{ search_form.submit }}
+                    {{ search_form.csrf_token }}
+                </form>
+            </nav>
+            {% endblock %}
+        </header>
 
-{% block head %}
-{{ super() }}
-<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
-<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/screen.min.css') }}">
-{% endblock %}
+        <main class="container">
+            {% block content %}
+            <div id="flash"></div>
+            {% block page_content %}{% endblock %}
+            {% endblock %}
+        </main>
 
-{% block scripts %}
-{{ super() }}
-{{ moment.include_moment() }}
-<script src="{{ url_for('static', filename='javascript/app.min.js') }}"></script>
-<script> 
-    $(document).ready(function(){
-        {% for message in get_flashed_messages() %}
-            flash('{{message}}');
-        {% endfor %}
-    });
-</script>
-{% endblock %}
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        {{ moment.include_moment() }}
+        <script src="{{ url_for('static', filename='javascript/app.min.js') }}"></script>
+        <script>
+            $(document).ready(function () {
+                {% for message in get_flashed_messages() %}
+                flash('{{message}}');
+                {% endfor %}
+            });
+        </script>
+        {% block scripts %}{% endblock %}
 
-{% block navbar %}
-<nav class="navbar navbar-inverse" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="/">AXNH</a>
-        </div>
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li><a href="/">Now</a></li>
-                <li><a href="{{ url_for('fish') }}">All Fish</a></li>
-                <li><a href="{{ url_for('bugs') }}">All Bugs</a></li>
-                <li><a href="{{ url_for('events') }}">All Events</a></li>
-            </ul>
-        </div>
-        <form action="{{ url_for('search') }}" method="post">
-            {{ search_form.query(placeholder='Search all the things') }}
-            {{ search_form.submit }}
-            {{ search_form.csrf_token }}
-        </form>
-    </div>
-</nav>
-{% endblock %}
-
-{% block content %}
-<div class="container">
-    <div id="flash"></div>
-    {% block page_content %}{% endblock %}
-</div>
-{% endblock %}
+    </body>
+</html>

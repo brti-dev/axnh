@@ -1,14 +1,143 @@
-body {
-    background: #88c9a1 url(/static/images/assets/pattern-confetti.jpg) repeat top left;
-}
+/* Normalize this baby (Thanks Normalizer team!) */
 
-ul.data-thumbs {
+@import url('normalize.css');
+
+/* Variables & Mixins */
+
+@mixin inline-list() {
     list-style: none;
     margin: 0;
     padding: 0;
+}
+
+$color-primary: #56926c;
+
+/* Common element syles */
+
+a, .link {
+    transition: all 200ms linear;
+    text-decoration: none;
+    color: $color-primary;
+    cursor: pointer;
+    &:hover {
+        color: darken($color-primary, 15%);
+        text-decoration: underline;
+    }
+}
+pre {
+    overflow: auto;
+}
+
+input {
+    font-size: 14px;
+}
+
+/* Layout styles */
+
+:root {
+  font: normal 100% sans-serif;
+  font-size: calc(100vw / 25);
+}
+
+body {
+    background: #88c9a1 url(/static/images/assets/pattern-leaves-white.jpg) repeat top left;
+    margin: 0;
+    padding: 0;
+    > .container {
+        width: 90%;
+        margin-right: auto;
+        margin-left: auto;
+    }
+}
+
+/* Large (non-mobile) screen styles */
+@media (min-width: 640px) {
+    :root {
+        font-size: calc(100vw / 70);
+    }
+    body > .container {
+        width: 60%;
+    }
+    #search {
+        display: block !important;
+    }
+}
+
+header {
+    nav {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin: 1em -.5em 2em;
+        text-rendering: optimizeLegibility;
+        line-height: 1.3rem;
+        font-size: 1.3rem;
+        font-weight: 300;
+        font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+        letter-spacing: 0;
+        form#search {
+            display: none;
+            float: right;
+            padding: .5em 0;
+        }
+        ul {
+            display: flex;
+            @include inline-list();
+            li {
+                @include inline-list();
+                a {
+                    display: block;
+                    padding: .5em;
+                    text-decoration: none;
+                    color: #282828;
+                    &:hover {
+                        text-decoration: underline;
+                    }
+                }
+            }
+        }
+    }
+}
+
+#flash {
+    .alert {
+        padding: 1.5em;
+        margin-bottom: 2em;
+        border-radius: 4px;
+    }
+    .alert-warning {
+        background-color: #f1e26f;
+    }
+    button.close {
+        padding: 0;
+        cursor: pointer;
+        background: 0 0;
+        border: 0;
+        float: right;
+        font-size: 21px;
+        font-weight: 700;
+        line-height: 1;
+        text-shadow: 0 1px 0 #fff;
+        opacity: .2;
+        &:hover {
+            opacity: 1;
+        }
+    }
+}
+
+#currentdata {
+    width: 100vw;
+    margin: 0 -20vw;
+}
+ul.data-thumbs {
+    background: url(/static/images/assets/pattern-waves-4.jpg) repeat top left;
+    list-style: none;
+    margin: 0;
+    padding-right: 20vw;
+    padding-left: 20vw;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-evenly;
     flex-wrap: wrap;
     & > li {
         list-style: none;
@@ -17,5 +146,46 @@ ul.data-thumbs {
         & > a {
             display: block;
         }
+    }
+}
+ul.data-bugs {
+    background-image: url(/static/images/assets/pattern-confetti.jpg);
+}
+
+.speechbubble {
+    position: relative;
+    height: 145px;
+    margin-bottom: 2em;
+    padding-right: 124px;
+    background: url(/static/images/assets/blathers-speechbubble-right.png) no-repeat top right;
+    .speechbubble-container {
+        height: 145px;
+        background: url(/static/images/assets/blathers-speechbubble-left.png) no-repeat top left;
+        .speechbubble-speech {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 40px 45px;
+            text-rendering: optimizeLegibility;
+            line-height: 1.1;
+            font-size: 1.3rem;
+            font-weight: 300;
+            font-family: Open Sans,sans-serif;
+            letter-spacing: 0;
+            color: #282828;
+        }
+    }
+}
+#speechbubble-blathers {
+    display: none;
+    position: absolute;
+    left: -167px;
+    top: 0;
+    z-index: -1;
+    transform: rotate(25deg);
+}
+@media (min-width: 640px) {
+    #speechbubble-blathers {
+        display: initial;
     }
 }
