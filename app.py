@@ -25,31 +25,17 @@ class DB:
     def __init(self, hemisphere='north'):
         self.hemisphere = hemisphere
 
+    """Get a whole data set"""
     def getTable(self, table):
         with open('./data/{}_{}.json'.format(table, self.hemisphere)) as json_file:
             data = json.load(json_file)
         return data
 
-    def findAll(self, table, filter={}):
+    """Return a data set filtered by properties"""
+    def findAll(self, table, filterer=None):
         data = self.getTable(table)
-        if filter:
-            for name, info in data.copy().items():
-                # print(name, '***********')
-                found = 0
-                for key, val in info.items():
-                    # print(key, ':', type(val))
-                    if key in filter:
-                        # print('check', filter, key, filter[key])
-                        if type(val) is list:
-                            if filter[key] in val:
-                                found += 1
-                                # print('found', filter[key], 'in', key)
-                        else:
-                            if filter[key] == val:
-                                found += 1
-                                # print('found', filter[key], 'in', key)
-                if found < 2:
-                    del data[name]
+        if filterer:
+            data = dict(filter(filterer, data.items()))
         return data
 
     def findByName(self, name, table):
@@ -58,14 +44,18 @@ class DB:
 
 @app.route('/')
 def index():
+    month = time.strftime('%H')
+    hour = time.strftime('%H')
     db = DB()
-    data = {}
-    data['fish'] = db.findAll('fish', {'months': int(time.strftime('%m')), 'times': int(time.strftime('%H'))})
-    data['bugs'] = db.findAll('bugs', {'months': int(time.strftime('%m')), 'times': int(time.strftime('%H'))})
+    # ????????????????
+    data_bugs = db.findAll('bugs', lambda item: month in item[1]['months'] and hour in item[1]['times'])
+    print(data_bugs)
+    data_fish = db.findAll('fish', lambda item: month in item[1]['months'] and hour in item[1]['times'])
     return render_template(
         'index.html',
         current_time = datetime.utcnow(),
-        data = data
+        bugs = data_bugs,
+        fish = data_fish,
     )
 
 """ Establishes the user's time via frontend
@@ -85,12 +75,12 @@ def getTime():
     if client_time != server_time:
         #set session for hemisphere
         db = DB()
-        data = {}
-        data['fish'] = db.findAll('fish', {'months': int(month), 'times': int(hour)})
-        data['bugs'] = db.findAll('bugs', {'months': int(month), 'times': int(hour)})
+        data_fish, data_bugs = {}, {}
+        data_fish = db.findAll('fish', lambda item: int(month) in item[1]['months'] and int(hour) in item[1]['times'])
+        data_bugs = db.findAll('bugs', lambda item: int(month) in item[1]['months'] and int(hour) in item[1]['times'])
         response_json = {
             # 'response':'Information updated based on your local time', 
-            'html': render_template('fish_render.html', data=data) + render_template('bugs_render.html', data=data)
+            'html': render_template('bugs_render.html', bugs=data_bugs) + render_template('fish_render.html', fish=data_fish)
         }
     else:
         response_json = {'ok':'ok'}
@@ -144,13 +134,23 @@ def userId(id):
 @app.route('/search/<string:query>')
 def search(query=None):
     form = SearchForm()
+    results_bugs, results_fish = {}, {}
+    num_results, num_results_bugs, num_results_fish = 0, 0, 0
+
     if form.validate_on_submit():
         query = form.query.data
+        db = DB()
+        results_fish = db.findAll('fish', lambda item: query.lower() in item[0].lower())
+        results_bugs = db.findAll('bugs', lambda item: query.lower() in item[0].lower())
+        num_results_bugs = len(results_bugs)
+        num_results_fish = len(results_fish)
+        num_results = num_results_bugs + num_results_fish
+
         print('form valid... redirect to', url_for('search', query=query))
         """This doesn't work. Why?! expect /search/foo actual /search/?query=foo
         return redirect(url_for('search', query=query))"""
-        return redirect('/search/' + query)
-    return render_template('search.html', query=query)
+        # return redirect('/search/' + query)
+    return render_template('search.html', query=query, fish=results_fish, bugs=results_bugs, num_results=num_results, num_results_bugs=num_results_bugs, num_results_fish=num_results_fish)
 
 @app.route("/user/<string:name>", methods=['GET', 'POST'])
 def user(name):

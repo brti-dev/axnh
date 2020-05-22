@@ -2,8 +2,15 @@
 
 {% block page_content %}
 <div class="page-header">
-    <h1>We found zero results for <i>{{query}}</i></h1>
+    <h1>We found {{ num_results }} results for <i>{{ query }}</i></h1>
 </div>
-<p>Maybe that's because this thing isn't working yet!</p>
 
+<div id="searchresults" class="data-list">
+    {% if num_results_bugs %}
+        {% include 'bugs_render.html' %}
+    {% endif %}
+    {% if num_results_fish %}
+        {% include 'fish_render.html' %}
+    {% endif %}
+</div>
 {% endblock %}

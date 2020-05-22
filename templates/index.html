@@ -4,13 +4,13 @@
 <div class="speechbubble">
     <div class="speechbubble-container">
         <div class="speechbubble-speech">
-            The following specimines are available at <time id="time">{{ moment(current_time).format('LLLL') }}</time>
+            The following specimens are available at <time id="time">{{ moment(current_time).format('LLLL') }}</time>
         </div>
     </div>
 </div>
 <img src="{{ url_for('static', filename='images/assets/blathers.png') }}" alt="Blathers" id="speechbubble-blathers">
 
-<div id="currentdata">
+<div id="currentdata" class="data-list">
     {% include 'bugs_render.html' %}
     {% include 'fish_render.html' %}
 </div>
