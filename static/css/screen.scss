@@ -135,6 +135,7 @@ ul.data-thumbs {
     margin: 0;
     padding-right: 20vw;
     padding-left: 20vw;
+    border-top: 3px solid white;
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
@@ -146,6 +147,9 @@ ul.data-thumbs {
         & > a {
             display: block;
         }
+    }
+    & + ul.data-thumbs {
+        border-bottom: 3px solid white;
     }
 }
 ul.data-bugs {
