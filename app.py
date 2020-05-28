@@ -44,8 +44,9 @@ class DB:
 
 @app.route('/')
 def index():
-    month = time.strftime('%H')
-    hour = time.strftime('%H')
+    month = int(time.strftime('%m'))
+    hour = int(time.strftime('%H'))
+    print('Server time', month, hour)
     db = DB()
     # ????????????????
     data_bugs = db.findAll('bugs', lambda item: month in item[1]['months'] and hour in item[1]['times'])
