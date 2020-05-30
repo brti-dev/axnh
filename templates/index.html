@@ -4,7 +4,7 @@
 <div class="speechbubble">
     <div class="speechbubble-container">
         <div class="speechbubble-speech">
-            The following specimens are available at <time id="time">{{ moment(current_time).format('LLLL') }}</time>
+            The following specimens are available at <time datetime="{{ current_time }}" id="time">{{ moment(current_time).format('LLLL') }}</time>
         </div>
     </div>
 </div>
@@ -19,7 +19,7 @@
     <li><a href="{{ url_for('fish') }}">All Fish</a></li>
     <li><a href="{{ url_for('bugs') }}">All Bugs</a></li>
     <li><s>All Events</s></li>
-    <li>Search eg. <a href="{{url_for('search', query='Bitterling')}}">Bitterling</a></li>
+    <li><a href="{{ url_for('search') }}">Search</a></li>
 </ul>
 <p>This page loaded at {{ moment(current_time).format('LLLL') }} (That was {{ moment(current_time).fromNow(refresh=True) }})</p>
 <!--<h2>Featured Content</h2>

@@ -4,23 +4,33 @@
 
 /* Variables & Mixins */
 
-@mixin inline-list() {
+$breakpoint-mobile: 640px;
+$green: #56926c;
+
+@mixin breakpoint($view) {
+    @if $view == mobile {
+        @media (max-width: $breakpoint-mobile) { @content; }
+    }
+    @else {
+        @media (min-width: $breakpoint-mobile + 1px) { @content; }
+    }
+}
+
+@mixin base-list() {
     list-style: none;
     margin: 0;
     padding: 0;
 }
-
-$color-primary: #56926c;
 
 /* Common element syles */
 
 a, .link {
     transition: all 200ms linear;
     text-decoration: none;
-    color: $color-primary;
+    color: $green;
     cursor: pointer;
     &:hover {
-        color: darken($color-primary, 15%);
+        color: darken($green, 15%);
         text-decoration: underline;
     }
 }
@@ -50,8 +60,7 @@ body {
     }
 }
 
-/* Large (non-mobile) screen styles */
-@media (min-width: 640px) {
+@include breakpoint(screen) {
     :root {
         font-size: calc(100vw / 70);
     }
@@ -82,9 +91,9 @@ header {
         }
         ul {
             display: flex;
-            @include inline-list();
+            @include base-list();
             li {
-                @include inline-list();
+                @include base-list();
                 a {
                     display: block;
                     padding: .5em;
@@ -127,14 +136,11 @@ header {
 
 .data-list {
     width: 100vw;
-    margin: 0 -20vw;
+    margin: 0 -5vw;
 }
 ul.data-thumbs {
     background: url(/static/images/assets/pattern-waves-4.jpg) repeat top left;
-    list-style: none;
-    margin: 0;
-    padding-right: 20vw;
-    padding-left: 20vw;
+    @include base-list();
     border-top: 3px solid white;
     display: flex;
     flex-direction: row;
@@ -154,6 +160,78 @@ ul.data-thumbs {
 }
 ul.data-bugs {
     background-image: url(/static/images/assets/pattern-confetti.jpg);
+}
+img.critter-tn {
+    width: 128px;
+    height: 128px;
+}
+table.data-table {
+    thead th {
+        text-align: left;
+    }
+    tbody th {
+        a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    }
+    th:nth-child(1) {
+        text-align: center !important;
+    }
+}
+@include breakpoint(mobile) {
+    table.data-table {
+        thead {
+            display: none; 
+        }
+        tr, th, td, tbody {
+            display: block;
+        }
+        tbody th {
+            margin-top: 1em;
+            text-align: left;
+            a {
+                flex-direction: row;
+                align-items: center;
+            }
+        }
+        td {
+            position: relative;
+            padding-left: 25%;
+            &:before {
+                position: absolute;
+                left: 0;
+                font-weight: bold;
+            }
+        }
+        td:nth-child(2):before {
+            content: 'Price';
+        }
+        td:nth-child(3):before {
+            content: 'Location';
+        }
+        td:nth-child(4):before {
+            content: 'Months';
+        }
+        td:nth-child(5):before {
+            content: 'Hours';
+        }
+        img.critter-tn {
+            width: 64px;
+            height: 64px;
+            margin-right: 5px;
+        }
+    }
+}
+@include breakpoint(screen) {
+    .data-list {
+        margin: 0 -20vw;
+    }
+    .data-thumbs {
+        padding-right: 20vw !important;
+        padding-left: 20vw !important;
+    }
 }
 
 .speechbubble {
@@ -181,15 +259,12 @@ ul.data-bugs {
     }
 }
 #speechbubble-blathers {
-    display: none;
     position: absolute;
     left: -167px;
     top: 0;
     z-index: -1;
     transform: rotate(25deg);
-}
-@media (min-width: 640px) {
-    #speechbubble-blathers {
-        display: initial;
+    @include breakpoint(mobile) {
+        display: none;
     }
 }

@@ -3,33 +3,61 @@
 {% block page_content %}
 {% if name %}
 <h1>{{name}}</h1>
+<img src="{{ url_for('static', filename='images/bugs/'+name+'.png') }}" alt="{{ name }}" class="critter-tn">
 <p>It's a <a href="{{url_for('bugs')}}">bug</a></p>
-<dl>
-    {% for key, val in data.items() %}
-        <dt>{{ key }}</dt>
-        <dd>{{ val }}</dd>
-    {% endfor %}
+<dl class="data-item">
+    <dt>Price</dt>
+    <dd>{{data.price }} bells</dd>
+
+    <dt>Location</dt>
+    <dd>{{ data.location }}</dd>
+
+    <dt>Months available</dt>
+    {% if data.months|length == 12 %}
+        <dd>Year round</dd>
+    {% else %}
+        {% for month in data.months %}
+            <dd>{{ all_months_by_name[month] }}</dd>
+        {% endfor %}
+    {% endif %}
+
+    <dt>Times</dt>
+    <dd>{{ data.times_readable }}</dd>
 </dl>
 {% else %}
 <h1>Bugs</h1>
 
-<table>
-{% for name, d in data.items() %}
+<table class="data-table">
+{% for name, prop in data.items() %}
     {% if loop.first %}
-        <tr>
-            <th>Bugs</th>
-            {% for key, value in d.items() %}
-                <th>{{ key }}</th>
-            {% endfor %}
-        </tr>
+        <thead>
+            <tr>
+                <th>Bugs</th>
+                <th>Price</th>
+                <th>Location</th>
+                <th>Months available</th>
+                <th>Times</th>
+            </tr>
+        </thead>
+        <tbody>
     {% endif %}
     <tr>
-        <td><a href="{{url_for('bugs', name=name)}}"><img src="{{ url_for('static', filename='images/bugs/'+name+'.png') }}" alt="{{ name }}">{{name}}</a></td>
-        {% for key, value in d.items() %}
-            <td>{{value}}</td>
-        {% endfor %}
+        <th><a href="{{url_for('bugs', name=name)}}"><img src="{{ url_for('static', filename='images/bugs/'+name+'.png') }}" alt="{{ name }}" class="critter-tn"><span>{{name}}</span></a></th>
+        <td>{{ prop.price }} bells</td>
+        <td>{{ prop.location }}</td>
+        <td>
+            {% if prop.months|length == 12 %}
+                Year round
+            {% else %}
+                {% for month in prop.months %}
+                {{ all_months_by_name[month] }}
+                {% endfor %}
+            {% endif %}
+        </td>
+        <td>{{ prop.times_readable }}</td>
     </tr>
 {% endfor %}
+    </tbody>
 </table>
 {% endif %}
 {% endblock %}

@@ -2,7 +2,7 @@
     {% for name, var in fish.items() %}
         <li>
             <a href="{{ url_for('fish', name=name) }}" title="{{ name }} ({{ var.location }})">
-                <img src="{{ url_for('static', filename='images/fish/'+name+'.png') }}" alt="{{ name }}" width="128" height="128">
+                <img src="{{ url_for('static', filename='images/fish/'+name+'.png') }}" alt="{{ name }}" class="critter-tn">
             </a>
         </li>
     {% endfor %}

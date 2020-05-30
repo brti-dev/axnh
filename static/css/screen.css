@@ -31,8 +31,7 @@ body {
     margin-right: auto;
     margin-left: auto; }
 
-/* Large (non-mobile) screen styles */
-@media (min-width: 640px) {
+@media (min-width: 641px) {
   :root {
     font-size: calc(100vw / 70); }
   body > .container {
@@ -96,14 +95,13 @@ header nav {
 
 .data-list {
   width: 100vw;
-  margin: 0 -20vw; }
+  margin: 0 -5vw; }
 
 ul.data-thumbs {
   background: url(/static/images/assets/pattern-waves-4.jpg) repeat top left;
   list-style: none;
   margin: 0;
-  padding-right: 20vw;
-  padding-left: 20vw;
+  padding: 0;
   border-top: 3px solid white;
   display: flex;
   flex-direction: row;
@@ -120,6 +118,59 @@ ul.data-thumbs {
 
 ul.data-bugs {
   background-image: url(/static/images/assets/pattern-confetti.jpg); }
+
+img.critter-tn {
+  width: 128px;
+  height: 128px; }
+
+table.data-table thead th {
+  text-align: left; }
+
+table.data-table tbody th a {
+  display: flex;
+  flex-direction: column;
+  align-items: center; }
+
+table.data-table th:nth-child(1) {
+  text-align: center !important; }
+
+@media (max-width: 640px) {
+  table.data-table thead {
+    display: none; }
+  table.data-table tr, table.data-table th, table.data-table td, table.data-table tbody {
+    display: block; }
+  table.data-table tbody th {
+    margin-top: 1em;
+    text-align: left; }
+    table.data-table tbody th a {
+      flex-direction: row;
+      align-items: center; }
+  table.data-table td {
+    position: relative;
+    padding-left: 25%; }
+    table.data-table td:before {
+      position: absolute;
+      left: 0;
+      font-weight: bold; }
+  table.data-table td:nth-child(2):before {
+    content: 'Price'; }
+  table.data-table td:nth-child(3):before {
+    content: 'Location'; }
+  table.data-table td:nth-child(4):before {
+    content: 'Months'; }
+  table.data-table td:nth-child(5):before {
+    content: 'Hours'; }
+  table.data-table img.critter-tn {
+    width: 64px;
+    height: 64px;
+    margin-right: 5px; } }
+
+@media (min-width: 641px) {
+  .data-list {
+    margin: 0 -20vw; }
+  .data-thumbs {
+    padding-right: 20vw !important;
+    padding-left: 20vw !important; } }
 
 .speechbubble {
   position: relative;
@@ -144,13 +195,11 @@ ul.data-bugs {
       color: #282828; }
 
 #speechbubble-blathers {
-  display: none;
   position: absolute;
   left: -167px;
   top: 0;
   z-index: -1;
   transform: rotate(25deg); }
-
-@media (min-width: 640px) {
-  #speechbubble-blathers {
-    display: initial; } }
+  @media (max-width: 640px) {
+    #speechbubble-blathers {
+      display: none; } }

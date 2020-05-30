@@ -48,9 +48,7 @@ def index():
     hour = int(time.strftime('%H'))
     print('Server time', month, hour)
     db = DB()
-    # ????????????????
     data_bugs = db.findAll('bugs', lambda item: month in item[1]['months'] and hour in item[1]['times'])
-    print(data_bugs)
     data_fish = db.findAll('fish', lambda item: month in item[1]['months'] and hour in item[1]['times'])
     return render_template(
         'index.html',
@@ -88,19 +86,27 @@ def getTime():
 
     return jsonify(response_json)
 
+all_months_by_name = [None, 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+def parseMonths(d_months):
+    return [all_months_by_name[x] for x in d_months]
+
 @app.route("/fish")
 @app.route("/fish/<name>")
 def fish(name=None):
     db = DB()
     data = db.getTable('fish')
     if (name == None):
-        flash('Work in progress')
         return render_template(
             'fish.html',
-            data = data
+            data = data,
+            all_months_by_name=all_months_by_name
         )
-    else:
-        return render_template('fish.html', name=name, data=db.findByName(name, 'fish'))
+    return render_template(
+        'fish.html', 
+        name=name, 
+        data=db.findByName(name, 'fish'), 
+        all_months_by_name=all_months_by_name
+    )
 
 @app.route("/bugs")
 @app.route("/bugs/<name>")
@@ -108,13 +114,17 @@ def bugs(name=None):
     db = DB()
     data = db.getTable('bugs')
     if (name == None):
-        flash('Work in progress')
         return render_template(
             'bugs.html',
-            data = data
+            data=data,
+            all_months_by_name=all_months_by_name
         )
-    else:
-        return render_template('bugs.html', name=name, data=db.findByName(name, 'bugs'))
+    return render_template(
+        'bugs.html', 
+        name=name, 
+        data=db.findByName(name, 'bugs'), 
+        all_months_by_name=all_months_by_name
+    )
 
 @app.route("/events")
 @app.route("/events/<name>")
