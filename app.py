@@ -47,6 +47,7 @@ def index():
     month = int(time.strftime('%m'))
     hour = int(time.strftime('%H'))
     print('Server time', month, hour)
+    # flash('Server time {} {}'.format(month, hour))
     db = DB()
     data_bugs = db.findAll('bugs', lambda item: month in item[1]['months'] and hour in item[1]['times'])
     data_fish = db.findAll('fish', lambda item: month in item[1]['months'] and hour in item[1]['times'])

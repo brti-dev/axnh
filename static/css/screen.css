@@ -1,7 +1,4 @@
-/* Normalize this baby (Thanks Normalizer team!) */
 @import url("normalize.css");
-/* Variables & Mixins */
-/* Common element syles */
 a, .link {
   transition: all 200ms linear;
   text-decoration: none;
@@ -17,27 +14,24 @@ pre {
 input {
   font-size: 14px; }
 
-/* Layout styles */
 :root {
   font: normal 100% sans-serif;
   font-size: calc(100vw / 25); }
-
+  @media (min-width: 641px) {
+    :root {
+      font-size: calc(100vw / 70); } }
+.grid-page {
+  display: grid;
+  grid-template-columns: [margin-start] 5% [narrow-gutter-start] 10% [wide-gutter-start] 70% [wide-gutter-end] 10% [narrow-gutter-end] 5% [margin-end]; }
+  .grid-page > * {
+    grid-column: narrow-gutter-start / narrow-gutter-end; }
+    @media (min-width: 641px) {
+      .grid-page > * {
+        grid-column: wide-gutter-start / wide-gutter-end; } }
 body {
   background: #88c9a1 url(/static/images/assets/pattern-leaves-white.jpg) repeat top left;
   margin: 0;
   padding: 0; }
-  body > .container {
-    width: 90%;
-    margin-right: auto;
-    margin-left: auto; }
-
-@media (min-width: 641px) {
-  :root {
-    font-size: calc(100vw / 70); }
-  body > .container {
-    width: 60%; }
-  #search {
-    display: block !important; } }
 
 header nav {
   display: flex;
@@ -54,6 +48,9 @@ header nav {
     display: none;
     float: right;
     padding: .5em 0; }
+    @media (min-width: 641px) {
+      header nav form#search {
+        display: block !important; } }
   header nav ul {
     display: flex;
     list-style: none;
@@ -94,29 +91,29 @@ header nav {
     opacity: 1; }
 
 .data-list {
-  width: 100vw;
-  margin: 0 -5vw; }
+  grid-column: margin-start / margin-end; }
 
-ul.data-thumbs {
+.data-thumbs {
   background: url(/static/images/assets/pattern-waves-4.jpg) repeat top left;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  border-top: 3px solid white;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  flex-wrap: wrap; }
-  ul.data-thumbs > li {
+  border-top: 3px solid white; }
+  .data-thumbs > ul {
     list-style: none;
     margin: 0;
-    padding: 0; }
-    ul.data-thumbs > li > a {
-      display: block; }
-  ul.data-thumbs + ul.data-thumbs {
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    flex-wrap: wrap; }
+    .data-thumbs > ul > li {
+      list-style: none;
+      margin: 0;
+      padding: 0; }
+      .data-thumbs > ul > li > a {
+        display: block; }
+  .data-thumbs + .data-thumbs {
     border-bottom: 3px solid white; }
 
-ul.data-bugs {
+.data-bugs {
   background-image: url(/static/images/assets/pattern-confetti.jpg); }
 
 img.critter-tn {
@@ -164,13 +161,6 @@ table.data-table th:nth-child(1) {
     width: 64px;
     height: 64px;
     margin-right: 5px; } }
-
-@media (min-width: 641px) {
-  .data-list {
-    margin: 0 -20vw; }
-  .data-thumbs {
-    padding-right: 20vw !important;
-    padding-left: 20vw !important; } }
 
 .speechbubble {
   position: relative;

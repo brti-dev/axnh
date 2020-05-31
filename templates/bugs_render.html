@@ -1,4 +1,5 @@
-<ul class="data-thumbs data-bugs">
+<div class="data-thumbs data-bugs grid-page">
+    <ul>
     {% for name, var in bugs.items() %}
         <li>
             <a href="{{ url_for('bugs', name=name) }}" title="{{ name }} ({{ var.location }})">
@@ -6,4 +7,5 @@
             </a>
         </li>
     {% endfor %}
-</ul>
+    </ul>
+</div>

@@ -14,6 +14,9 @@
     {% include 'bugs_render.html' %}
     {% include 'fish_render.html' %}
 </div>
+{% endblock %}
+
+{% block foot %}
 <h2>Navigate</h2>
 <ul>
     <li><a href="{{ url_for('fish') }}">All Fish</a></li>

@@ -1,8 +1,8 @@
-/* Normalize this baby (Thanks Normalizer team!) */
+// Normalize this baby (Thanks Normalizer team!) //
 
 @import url('normalize.css');
 
-/* Variables & Mixins */
+// Variables & Mixins //
 
 $breakpoint-mobile: 640px;
 $green: #56926c;
@@ -22,7 +22,7 @@ $green: #56926c;
     padding: 0;
 }
 
-/* Common element syles */
+// Common element syles //
 
 a, .link {
     transition: all 200ms linear;
@@ -42,34 +42,31 @@ input {
     font-size: 14px;
 }
 
-/* Layout styles */
+// Layout styles //
 
 :root {
-  font: normal 100% sans-serif;
-  font-size: calc(100vw / 25);
+    font: normal 100% sans-serif;
+    font-size: calc(100vw / 25);
+    @include breakpoint(screen) {
+        font-size: calc(100vw / 70);
+    }
+}
+
+.grid-page {
+    display: grid;
+    grid-template-columns: [margin-start] 5% [narrow-gutter-start] 10% [wide-gutter-start] 70% [wide-gutter-end] 10% [narrow-gutter-end] 5% [margin-end];
+    & > * {
+        grid-column: narrow-gutter-start / narrow-gutter-end;
+        @include breakpoint(screen) {
+            grid-column: wide-gutter-start / wide-gutter-end;
+        }
+    }
 }
 
 body {
     background: #88c9a1 url(/static/images/assets/pattern-leaves-white.jpg) repeat top left;
     margin: 0;
     padding: 0;
-    > .container {
-        width: 90%;
-        margin-right: auto;
-        margin-left: auto;
-    }
-}
-
-@include breakpoint(screen) {
-    :root {
-        font-size: calc(100vw / 70);
-    }
-    body > .container {
-        width: 60%;
-    }
-    #search {
-        display: block !important;
-    }
 }
 
 header {
@@ -88,6 +85,9 @@ header {
             display: none;
             float: right;
             padding: .5em 0;
+            @include breakpoint(screen) {
+                display: block !important;
+            }
         }
         ul {
             display: flex;
@@ -135,30 +135,31 @@ header {
 }
 
 .data-list {
-    width: 100vw;
-    margin: 0 -5vw;
+    grid-column: margin-start / margin-end;
 }
-ul.data-thumbs {
+.data-thumbs {
     background: url(/static/images/assets/pattern-waves-4.jpg) repeat top left;
-    @include base-list();
     border-top: 3px solid white;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    flex-wrap: wrap;
-    & > li {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        & > a {
-            display: block;
+    & > ul {
+        @include base-list();
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        flex-wrap: wrap;
+        & > li {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            & > a {
+                display: block;
+            }
         }
     }
-    & + ul.data-thumbs {
+    & + .data-thumbs {
         border-bottom: 3px solid white;
     }
 }
-ul.data-bugs {
+.data-bugs {
     background-image: url(/static/images/assets/pattern-confetti.jpg);
 }
 img.critter-tn {
@@ -179,9 +180,7 @@ table.data-table {
     th:nth-child(1) {
         text-align: center !important;
     }
-}
-@include breakpoint(mobile) {
-    table.data-table {
+    @include breakpoint(mobile) {
         thead {
             display: none; 
         }
@@ -222,15 +221,6 @@ table.data-table {
             height: 64px;
             margin-right: 5px;
         }
-    }
-}
-@include breakpoint(screen) {
-    .data-list {
-        margin: 0 -20vw;
-    }
-    .data-thumbs {
-        padding-right: 20vw !important;
-        padding-left: 20vw !important;
     }
 }
 

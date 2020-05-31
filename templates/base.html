@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/screen.min.css') }}">
         {% block head %}{% endblock %}
     </head>
-    <body>
+    <body class="grid-page">
 
         <header class="container">
             {% block navbar %}
@@ -28,12 +28,12 @@
             {% endblock %}
         </header>
 
-        <main class="container">
-            {% block content %}
-            <div id="flash"></div>
-            {% block page_content %}{% endblock %}
-            {% endblock %}
-        </main>
+        {% block content %}
+        <div id="flash"></div>
+        {% block page_content %}{% endblock %}
+        {% endblock %}
+
+        <footer>{% block foot %}{% endblock %}</footer>
 
         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         {{ moment.include_moment() }}
