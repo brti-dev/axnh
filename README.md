@@ -1,6 +1,6 @@
-# Animal Xing New Horizons
+# AXRN Animal Crossing New Horizons Right Now
 
-An app for [Animal Crossing: New Horizons](https://www.nintendo.com/games/detail/animal-crossing-new-horizons-switch/) players to show what critters are available at a particular time, notably time of access, and to list all available critters based on month, time of day, and location. Also events (holidays, birthdays, NPC visits, etc.) if time permits.
+An app for [Animal Crossing: New Horizons](https://www.nintendo.com/games/detail/animal-crossing-new-horizons-switch/) players to show what critters are available rn, and to list all available critters based on month, time of day, and location. Also events (holidays, birthdays, NPC visits, etc.) if time permits.
 
 ## Built With
 
@@ -9,7 +9,6 @@ An app for [Animal Crossing: New Horizons](https://www.nintendo.com/games/detail
 * [Beautiful Soup v4](https://www.crummy.com/software/BeautifulSoup/bs4/doc/) - Web scraping
 * [Jinja 2](https://jinja.palletsprojects.com/en/2.11.x/) - Templating
 * [SCSS](https://sass-lang.com/) - CSS preprocessing
-* Bootstrap
 
 ## Launch
 
@@ -32,3 +31,17 @@ All fruits are created equal, especially pears. No fruit discrimination allowed.
 
 * Data provided by [Animal Crossing Wiki | Fandom](https://animalcrossing.fandom.com/wiki/Animal_Crossing_Wiki) 
 * Runner.py compiler & minimizer inspired by [Julian Nash](https://pythonise.com/categories/python/python-minify-js-css-compile-scss)
+
+## Todo
+
+* Back end
+    * [x] Compile critter data
+        * [x] Scrape Animal Crossing Wiki
+    * [x] Flask app
+    * [ ] Determine/switch Hemisphere (rn it's only North, sorry Southern friends :/)
+    * [ ] Events
+* Front end
+    * [x] Responsive CSS, mobile-first
+        * [x] Issue: All critters data tables extend page width
+            * Media query that converts <table> to box elements
+    * [x] CSS Grid

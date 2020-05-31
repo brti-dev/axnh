@@ -17,7 +17,7 @@
                     <li><a href="/">Now</a></li>
                     <li><a href="{{ url_for('fish') }}">All Fish</a></li>
                     <li><a href="{{ url_for('bugs') }}">All Bugs</a></li>
-                    <li><a href="{{ url_for('events') }}">All Events</a></li>
+                    <!-- <li><a href="{{ url_for('events') }}">All Events</a></li> -->
                 </ul>
                 <form action="{{ url_for('search') }}" method="post" id="search">
                     {{ search_form.query(placeholder='Search all the things') }}
