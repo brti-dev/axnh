@@ -1,8 +1,27 @@
 {% extends "base.html" %}
 
+{%block head %}
+<style>
+    @media (max-width: 640px) {
+        header nav form#search {
+            display: block !important;
+            float: none;
+            position: absolute;
+            top: 2.5em;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block page_content %}
 <div class="page-header">
-    <h1>We found {{ num_results }} results for <i>{{ query }}</i></h1>
+    <h1>
+        {% if query is None %}
+            Search all the things
+        {% else %}
+            We found {{ num_results }} results for <i>{{ query }}</i>
+        {% endif %}
+    </h1>
 </div>
 
 <div id="searchresults" class="data-list">

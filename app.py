@@ -1,6 +1,5 @@
 from config import config
 from flask import Flask, abort, flash, redirect, render_template, request, session, url_for, jsonify
-from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 from datetime import datetime
 from forms import SearchForm
@@ -60,17 +59,17 @@ def index():
 
 """ Establishes the user's time via frontend
     If different from server time, refresh the page to reflect current stuffs"""
-@app.route("/getTime", methods=['GET'])
+@app.route('/getTime', methods=['GET'])
 def getTime():
-    client_time = request.args.get("time")
-    client_timezone = request.args.get("timezone")
+    client_time = request.args.get('time')
+    client_timezone = request.args.get('timezone')
     month, day, hour = client_time.split(' ')
-    print("Client time:", client_time, client_timezone)
+    print('Client time:', client_time, client_timezone)
 
     server_time = '{} {} {}'.format(time.strftime('%m').lstrip(
         '0'), time.strftime('%d').lstrip('0'), time.strftime('%H').lstrip('0'))
     server_timezone = time.strftime('%Z')
-    print("Server time:", server_time, server_timezone)
+    print('Server time:', server_time, server_timezone)
 
     if client_time != server_time:
         #set session for hemisphere
@@ -91,8 +90,8 @@ all_months_by_name = [None, 'January', 'February', 'March', 'April', 'May', 'Jun
 def parseMonths(d_months):
     return [all_months_by_name[x] for x in d_months]
 
-@app.route("/fish")
-@app.route("/fish/<name>")
+@app.route('/fish')
+@app.route('/fish/<name>')
 def fish(name=None):
     db = DB()
     data = db.getTable('fish')
@@ -109,8 +108,8 @@ def fish(name=None):
         all_months_by_name=all_months_by_name
     )
 
-@app.route("/bugs")
-@app.route("/bugs/<name>")
+@app.route('/bugs')
+@app.route('/bugs/<name>')
 def bugs(name=None):
     db = DB()
     data = db.getTable('bugs')
@@ -127,20 +126,10 @@ def bugs(name=None):
         all_months_by_name=all_months_by_name
     )
 
-@app.route("/events")
-@app.route("/events/<name>")
+@app.route('/events')
+@app.route('/events/<name>')
 def events(name=None):
     return render_template('404.html', name=name)
-
-users = {1:'bob', 2:'foo', 3:'bar'}
-
-@app.route("/user/id/<int:id>")
-def userId(id):
-    if id not in users:
-        abort(404)
-    else:
-        return redirect(url_for('user', name=users.get(id)))
-    return 'Get USERID:{}'.format(id)
 
 @app.route('/search/', methods=['GET', 'POST'])
 @app.route('/search/<string:query>')
@@ -163,18 +152,6 @@ def search(query=None):
         return redirect(url_for('search', query=query))"""
         # return redirect('/search/' + query)
     return render_template('search.html', query=query, fish=results_fish, bugs=results_bugs, num_results=num_results, num_results_bugs=num_results_bugs, num_results_fish=num_results_fish)
-
-@app.route("/user/<string:name>", methods=['GET', 'POST'])
-def user(name):
-    form = SearchForm()
-    if form.validate_on_submit():
-        name = form.name.data
-        return redirect(url_for('user', name=name))
-    return render_template(
-        'user.html', 
-        name = name,
-        form = form,
-    )
 
 @app.errorhandler(404)
 def page_not_found(e):
